@@ -16,10 +16,5 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def index():
-
-	engine.connect()
-	data = engine.execute('SELECT * FROM avto;').fetchall()
-	
-
-	return render_template('index.html',data=data)
+	return render_template('index.html')
 
