@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+
+{%block content%}
+{%for row in data %}
+<div class="card mb=3" style="width: 18rem;">
+  <img src="..." class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{row.name}}</h5>
+    <p class="card-text">Price: {{row.price}}<p>
+    <p class="card-text">Transmission: {{row.transmission}}<p>
+    <p class="card-text">Drive unit: {{row.drive_unit}}<p>
+    <p class="card-text">Engen: {{row.engen}}<p>
+    <p class="card-text">Type engen: {{row.type_engen}}<p>
+    <p class="card-text">Year: {{row.year}}<p>
+    <p class="card-text">City: {{row.city}}<p>
+    
+      
+    <a href="{{row.url}}" class="btn btn-primary">Смотреть на Drom.ru</a>
+   
+  </div>
+</div>
+{%endfor%}
+{%endblock%}
+
+
