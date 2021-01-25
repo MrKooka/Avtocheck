@@ -4,7 +4,7 @@ class Configuration(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     #... ://user:password@server/database
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:1@localhost:27017/test2'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:1@localhost:27017/avto'
 
     # Three slashes for a relative database path.
     # Four slashes for a absolute database path.
