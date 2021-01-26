@@ -10,6 +10,7 @@ engine = create_engine('mysql+pymysql://root:1@localhost:27017/avto')
 Base.prepare(engine,reflect=True)
 Avto = Base.classes.avto
 Cities = Base.classes.cities
+RequestForm = Base.classes.request_form
 Session = sessionmaker(bind=engine)
 session = Session()
 
