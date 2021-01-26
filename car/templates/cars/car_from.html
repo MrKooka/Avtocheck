@@ -3,34 +3,38 @@
 {%block content%}
 
 
-<form>
+<form class="col-6 mx-auto" id="mainform" method="POST" action="{{url_for('cars.choice_car',id_car=id_car)}}">
   <div class="form-group">
     <label for="exampleFormControlInput1">Email address</label>
-    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+    <input name="email" type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
   </div>
+ 
   <div class="form-group">
-    <label for="exampleFormControlSelect1">Example select</label>
-    <select class="form-control" id="exampleFormControlSelect1">
-      {%for city in cities%}
-            <option>{{city.city}}</option>
-      {%endfor%}
-
+    <label for="exampleFormControlSelect1">Ваш телефон</label>
+    <input name="phone" class="form-control" type="text" placeholder="В любой форме">
+    
+    <label for="exampleFormControlSelect1">Ваше имя</label>
+    <input name="name" class="form-control" type="text">
+      <label for="exampleFormControlSelect1">Поиск города</label>
+       <input class="form-control me-2 "  type="text" placeholder="Search" aria-label="Search" name="cq" value="{{ request.args.get('cq', '') }}">
+        <button class="btn btn-outline-success" form="cy" type="submit" style="display: none;" disabled>Поиск</button> 
+    <select name="city" class="form-control" id="exampleFormControlSelect1">
+          
+        {%for city in cities%}
+              <option>{{city.city}}</option>
+        {%endfor%}
     </select>
+  
   </div>
-  <div class="form-group">
-    <label for="exampleFormControlSelect2">Example multiple select</label>
-    <select multiple class="form-control" id="exampleFormControlSelect2">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
-    </select>
+ 
+  <div class="form-group mt-3">   
+    <label for="exampleFormControlTextarea1">Комментарий</label>
+    <textarea name="comment" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    
+    <input name='id_car' class="form-control"style="display: none;" type="text" value="{{id_car}}">
   </div>
-  <div class="form-group">
-    <label for="exampleFormControlTextarea1">Example textarea</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-  </div>
+  
+  <button class="mt-3 btn btn-outline-success" type="submit" form="mainform" >Отправить заявку</button>
 </form>
 
 {%endblock%}
