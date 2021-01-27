@@ -10,7 +10,7 @@ engine = create_engine('mysql+pymysql://root:1@localhost:27017/avto')
 Base.prepare(engine,reflect=True)
 Avto = Base.classes.avto
 Cities = Base.classes.cities
-RequestForm = Base.classes.request_form
+RequestForm_ = Base.classes.request_form
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -20,12 +20,6 @@ app = Flask(__name__)
 app.config.from_object(Configuration)
 db = SQLAlchemy(app)
 
-
-
-
-# def connect_db():
-# 	with engine.connect() as conn:
-# 		return conn
 
 @app.route('/')
 def index():

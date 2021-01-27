@@ -1,8 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint,jsonify
 from flask import render_template
 
 from flask import request
-from app import db,Avto,Cities,session,RequestForm
+from app import db,Avto,Cities,session,RequestForm_
 from flask import Blueprint
 from flask import redirect
 from flask import url_for
@@ -10,11 +10,15 @@ from flask import url_for
 from flask_security import login_required
 from app import engine
 
+from .form import RequestForm
+
+
 cars = Blueprint('cars', __name__, template_folder='templates')
 
 
 @cars.route('/')
 def index():
+
 	q = request.args.get('q')
 
 	with engine.connect():
@@ -31,30 +35,35 @@ def index():
 
 @cars.route('/choice_car/<id_car>',methods=['POST','GET'])
 def choice_car(id_car):
-
-	cq = request.args.get('cq')
-
+	form = RequestForm()
 	
-	if cq:
-		cities = session.query(Cities).filter(Cities.city.contains(cq)).all()
-		return render_template('cars/car_from.html',cities=cities,id_car=id_car)
-	else:	
-		with engine.connect():
+	if request.method=="POST":
+		phone = form.phone.data
+		name = form.name.data
+		email = form.email.data
+		city = form.cities.data
+		comment = form.comment.data
+		id_car = request.form['value_id_car']
 
-			cities = engine.execute('SELECT * FROM cities')
-			data = engine.execute(f'SELECT id, name FROM avto WHERE id LIKE {id_car}').fetchall()
-			id = data[0][0]
-			name=data[0][1]
-		
-
-		return render_template('cars/car_from.html',name=name,id=id,cities=cities,id_car=id_car)
-	if request.method == 'POST':
-		print(request.form['comment'])
-		forma = session.add(RequestForm(phone=request.form['phone'],
-										name=request.form['name'],
-										email=request.form['email'],
-										city=request.form['city'],
-										comment=request.form['comment'],
-										id_car=int(request.form['id_car'])))
+		session.add(RequestForm_(phone=phone,name=name,email=email,city=city,comment=comment,id_car=id_car))
 		session.commit()
-		return redirect(url_for('index'))
+		return redirect(url_for('cars.index'))
+	
+	data = session.query(Cities).all()
+	form.cities.choices = [(i.city, i.city) for i in data]
+	cities = session.query(Cities).all()
+	id_car = session.query(Cities).filter(Cities.id==id_car).first().id	
+	
+	return render_template('cars/car_from.html',id_car=id_car,form=form,cities=cities)
+
+@cars.route('choice_car/city/<name>')
+def city(name):
+	cities = session.query(Cities).filter(Cities.city.contains(name)).all()
+	cityArray = []
+
+	for city in cities:
+		cityObj = {}
+		cityObj['id'] = city.id
+		cityObj['name'] = city.city
+		cityArray.append(cityObj)
+	return jsonify({'cities':cityArray})

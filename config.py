@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 class Configuration(object):
     DEBUG = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JSON_AS_ASCII = False
 
     #... ://user:password@server/database
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:1@localhost:27017/avto'

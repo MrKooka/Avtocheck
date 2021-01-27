@@ -1,11 +1,8 @@
-from app import engine,db
+from app import session,Cities
 
-def index():
-	engine.connect()
-	print(engine.execute("select  * from avto where id like 1").fetchone())
+def get_cities():
+	data = session.query(Cities).all()
+	return data
 
-index()
-def ad_car():
-	engine.connect()
-	print(engine.execute("SELECT name FROM avto WHERE id LIKE 2").fetchone())
-ad_car()
+data = get_cities()
+[print(i.city) for i in data]
