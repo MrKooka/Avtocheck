@@ -2,25 +2,8 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 from peewee import *
-
-
-db = MySQLDatabase('avto', user='root', password='1',
-                         host='localhost', port=27017)
-
-#Создаем таблицу в бд 
-class Avto(Model):
-	name = CharField()
-	price = CharField()
-	transmission = CharField()
-	drive_unit = CharField()
-	engen = CharField()
-	type_engen = CharField()
-	url = TextField()
-	year = CharField()
-	city = TextField()
-
-	class Meta:
-		database = db
+from models import Avto
+from app import db
 
 class AvitoParser:
 	def __init__(self):
@@ -42,11 +25,7 @@ class AvitoParser:
 		
 
 		for item in container:	
-			block = self.parse_block(item=item)
-		
-		# div = soup.find('div',class_='css-imk91o ed5wxk93').find('div',class_='css-1xaekgw e93r9u20')
-		# self.get_page_2(div)
-		
+			block = self.parse_block(item=item)	
 
 	
 	def parse_block(self,item):
@@ -62,6 +41,7 @@ class AvitoParser:
 				year = ''
 			try:
 				price = item.find('div',class_='css-1r6p0wr e6dhr4f2').find('div',class_='css-1dca0vj e1lm3vns0').find('span').text.strip().replace('q','')
+				price.split('.')[0]
 			except:
 				price=''
 			try:
@@ -72,6 +52,8 @@ class AvitoParser:
 
 			try:
 				type_engen = item.find_all('span',class_='css-1vlap19 e162wx9x0')[1].text.replace(',', '').strip()
+				if len(type_engen)>10:
+					type_engen = ''
 			except:
 				type_engen=''
 			try:
@@ -91,9 +73,9 @@ class AvitoParser:
 			except:
 				url = ''
 			
-
+			
 			data = {'name':name,
-					'price':price,
+					'price':int(price.split('.')[0].replace('\xa0','').replace(' ','')),
 					'transmission':transmission,
 					'drive_unit':drive_unit,
 					'engen':engen,
@@ -103,21 +85,21 @@ class AvitoParser:
 					'year':year
 					}	
 			self.write_db(data)
-			
 			return None 
 
 	@staticmethod
 	def write_db(data):
-		car = Avto.create(name=data['name'],
-						  price=data['price'],
-						  transmission=data['transmission'],
-						  drive_unit = data['drive_unit'],
-						  engen = data['engen'],
-						  type_engen = data['type_engen'],
-						  url = data['url'],
-						  city = data['city'],
-						  year = data['year'])
-		car.save()
+		avto = Avto(name=data['name'],
+					price=data['price'],
+					transmission=data['transmission'],
+					drive_unit = data['drive_unit'],
+					engen = data['engen'],
+					type_engen = data['type_engen'],
+					url = data['url'],
+					city = data['city'],
+					year = data['year'])
+		db.session.add(avto)
+		db.session.commit()
 	# def get_page_2(self,div):
 	# 	pages = div.find('div',class_='css-se5ay5 e1lm3vns0')
 	# 	for i in pages:
@@ -138,7 +120,7 @@ class AvitoParser:
 	# 						data['year']))	
 def main():
 	p = AvitoParser()
-	for i in range(1,5):
+	for i in range(10,20):
 		p.get_page(i)
 		print(i)
 	

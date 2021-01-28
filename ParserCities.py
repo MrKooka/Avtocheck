@@ -1,17 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
-from peewee import *
-
-db = MySQLDatabase('avto', user='root', password='1',
-                         host='localhost', port=27017)
-
-class Cities(Model):
-	city = CharField()
-	url = TextField()
-	class Meta:
-		database = db
-
+from models import Cities
+from app import db
 class Parser:
 	def __init__(self):
 		self.session = requests.Session()
@@ -39,17 +30,14 @@ class Parser:
 
 	@staticmethod
 	def write_db(cities):
-		
-		ci = Cities(city=cities['city'],
-					url=cities['url'])
-		ci.save()
-def create_db(db):
-	db.create_tables([Cities])
-	return None
+		data = Cities(city=cities['city'],
+					  url=cities['url'])
+		db.session.add(data)
+		db.session.commit()
+
 
 
 def main():
-	db.connect()
 	p = Parser()
 	p.get_page()
 
