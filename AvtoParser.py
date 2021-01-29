@@ -2,9 +2,9 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 from peewee import *
-from models import Avto
-from app import db
 
+from app import db
+from models import Avto
 class AvitoParser:
 	def __init__(self):
 		self.session = requests.Session()

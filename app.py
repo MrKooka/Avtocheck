@@ -14,15 +14,15 @@ app = Flask(__name__)
 app.config.from_object(Configuration)
 
 db = SQLAlchemy(app)
-Base = automap_base()
-engine = create_engine('mysql+pymysql://root:1@localhost:27017/avto')
-Base.prepare(engine,reflect=True)
+#Base = automap_base()
+#engine = create_engine('mysql+pymysql://root:1@localhost:27017/avto')
+#Base.prepare(engine,reflect=True)
 
 # Avto = Base.classes.avto
 # Cities = Base.classes.cities
 # RequestFormORM = Base.classes.request_form
-Session = sessionmaker(bind=engine)
-session = Session()
+#Session = sessionmaker(bind=engine)
+#session = Session()
 
 
 migrate = Migrate(app,db)
@@ -30,7 +30,7 @@ manager = Manager(app)
 manager.add_command('db',MigrateCommand)
 
 ### ADMIN ###
-from models import Avto,User,Role
+from models import Avto,User,Role,db
 # Сохраняем принцип DRY 
 class AdminMixin:
 	# метод поторый проверяет доступность обработчика к конкретному пользователю 
@@ -56,7 +56,7 @@ class HomeAdminView(AdminMixin,AdminIndexView):
 
 admin = Admin(app,'FlaskApp',url='/',index_view = HomeAdminView(name='Home'))
 # admin.add_view(ModelView(Avto,session)) - прошлая версия
-admin.add_view(AdminView(Avto,session))
+admin.add_view(AdminView(Avto,db.session))
 
 
 ### Flask-security ###

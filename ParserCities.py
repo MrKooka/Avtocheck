@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
-from models import Cities
+
 from app import db
+from models import Cities
 class Parser:
 	def __init__(self):
 		self.session = requests.Session()
