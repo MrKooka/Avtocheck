@@ -1,0 +1,16 @@
+{%extends 'base.html'%}
+
+{%block content%}
+<form method="POST" action="{{url_for('cars.signup')}}">
+{{form.hidden_tag()}}
+<p>{{ form.email.label() }} {{ form.email() }}
+<p>{{ form.phone.label() }} {{ form.phone() }}
+<p>{{form.username.label()}} {{form.username()}}
+<p>{{ form.password.label() }} {{ form.password() }}
+<p><input name="b" value="a" type="radio" >Проверяющий</p>
+<p><input name="b" value="b" type="radio" >Обычный пользователь</p> 
+<p>{{ form.submit() }}
+    
+  </form> 
+
+{%endblock%}

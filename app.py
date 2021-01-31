@@ -9,9 +9,13 @@ from flask_script import Manager
 from flask_admin import Admin,AdminIndexView	
 from flask_admin.contrib.sqla import ModelView
 from flask_security import SQLAlchemyUserDatastore,Security,current_user
-
+from flask_login import LoginManager
 app = Flask(__name__)
 app.config.from_object(Configuration)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 db = SQLAlchemy(app)
 #Base = automap_base()
@@ -28,6 +32,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 manager = Manager(app)
 manager.add_command('db',MigrateCommand)
+
 
 ### ADMIN ###
 from models import Avto,User,Role,db

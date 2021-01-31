@@ -1,9 +1,9 @@
 {%extends 'base.html'%}
 
 {%block content%}
-<form class="row col-3 m-auto">
+<form method="POST" action="{{url_for('cars.login')}}">
   <div class="form-group">
-   {{form.username.label()}} {{form.username(class_='form-control')}}
+  {{ form.email.label() }} {{ form.email(class_='form-control') }}
   </div>
   <div class="form-group">
     {{form.password.label()}} {{form.password(class_='form-control')}}
