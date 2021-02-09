@@ -1,11 +1,16 @@
 from flask import render_template,Blueprint,redirect,url_for,request,jsonify,current_app
-from models import Avto,RequestForm,Cities,User,Role
+from flask_login import login_user,logout_user,current_user
 #декоратор который скрывает обработчики от пользователей с неподходищими ролями
 from flask_security import login_required
-from app import db,user_datastore
-from .form import RequestForm_,RegisterForm_,LoginForm,LoginForm
-from flask_login import login_user,logout_user,current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+
+
+from .form import RequestForm_,RegisterForm_,LoginForm,LoginForm
+from models import Cities,User,Role,RequestForm,Avto
+from app import db,user_datastore
+from logic import Logic
+
+
 cars = Blueprint('cars', __name__, template_folder='templates')
 
 
@@ -29,7 +34,8 @@ def choice_car(id_car):
 		city = form.cities.data
 		comment = form.comment.data
 		id_car = request.form['value_id_car']
-		data = RequestForm(phone=phone,name=name,email=email,city=city,comment=comment,id_car=id_car)
+		data = RequestForm(phone=int(phone),name=name,email=email,city=city,
+						   comment=comment,id_car=id_car)
 		db.session.add(data)
 		db.session.commit()
 		return redirect(url_for('cars.index'))
@@ -74,6 +80,8 @@ def signup():
 			return redirect(url_for('.index'))
 
 	return render_template('cars/signup.html',form=form)
+
+
 @cars.route('/login',methods=['POST','GET'])
 def login():
 	form = LoginForm()
@@ -86,13 +94,18 @@ def login():
 		return '<h1>Invalid username or password</h1>'
 	return render_template('cars/login.html',form=form)
 
+
 @cars.route('/profil')
 @login_required
 def profil():
-	role = [(i.__dict__)['discription'] for i in current_user.roles][0]
-	name = current_user.username
-	print(name)
-	return render_template('cars/profil.html',role=role,name=name)
+	l = Logic()
+	role = [getattr(i,'discription') for i in current_user.roles][0]
+	form_and_car_id = l.get_form_and_car_id()
+	return render_template('cars/profil.html',role=role,current_user=current_user,Avto=Avto,\
+							form_and_car_id=form_and_car_id,RequestForm=RequestForm,\
+							)
+
+
 
 @cars.route('/logout')
 @login_required

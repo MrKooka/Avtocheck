@@ -14,20 +14,20 @@ class Parser:
 		url = 'https://auto.drom.ru/cities/all/'
 		r = self.session.get(url)
 		self.parse_block(r.text)
-	
+
 	def parse_block(self,text):
 		cities = {}
 		soup = BeautifulSoup(text,'lxml')
 		container = soup.find('div',class_='b-content b-media-cont b-media-cont_margin_huge').find('div',class_='b-selectCars b-media-cont').find_all('noscript')
-		
+
 		# print(container[84])
 		for n in range(0,84):
 			for i in container[n].find_all('a'):
-				city = i.text 
+				city = i.text
 				url = i.get('href')
 				cities.update({'city':city,'url':url})
 				self.write_db(cities)
-	
+
 
 	@staticmethod
 	def write_db(cities):
@@ -44,5 +44,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
-
