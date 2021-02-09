@@ -13,7 +13,7 @@
 				{%for dict_ in form_and_car_id%}
 					{%for row in Avto.query.filter(Avto.id == dict_['id_car']).all()%}
 						<div class="card mb-5 " >
-							<div class="col ">
+							<div class="col">
 						  		<div class="card-body ">
 						    	<h5 class="card-title ">{{row.name}}</h5>
 						   	 	<p class="card-text">Price: {{row.price}}</p>

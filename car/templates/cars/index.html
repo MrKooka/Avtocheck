@@ -1,26 +1,55 @@
 {%extends 'base.html'%}
 
 {%block content%}
-{%for row in data %}
-<div class="card mb=3" style="width: 18rem;">
-  <img src="..." class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">{{row.name}}</h5>
-    <p class="card-text">Price: {{row.price}}<p>
-    <p class="card-text">Transmission: {{row.transmission}}<p>
-    <p class="card-text">Drive unit: {{row.drive_unit}}<p>
-    <p class="card-text">Engen: {{row.engen}}<p>
-    <p class="card-text">Type engen: {{row.type_engen}}<p>
-    <p class="card-text">Year: {{row.year}}<p>
-    <p class="card-text">City: {{row.city}}<p>
-    
-      
-    <a href="{{row.url}}" class="btn btn-primary">Смотреть на Drom.ru</a>
-	<a href="{{url_for('cars.choice_car',id_car=row.id)}}" class=" mt-2 btn btn-primary">Заказать осмотр</a>
+<div class="container-fluid ">
+  <div class="container col-8">
+     <div class="row text-center ">
+      {%for row in pages.items %}
+        <div class="card mb-3 ml-2 mt-5 bg-light text-dark">
+          <div class="col">
+            <div class="card-body" >
 
+              <h5 class="card-title">{{row.name}}</h5>
+              <p class="card-text">Price: {{row.price}}</p>
+              <p class="card-text">Transmission: {{row.transmission}}</p>
+              <p class="card-text">Drive unit: {{row.drive_unit}}</p>
+              <p class="card-text">Engen: {{row.engen}}</p>
+              <p class="card-text">Type engen: {{row.type_engen}}</p>
+              <p class="card-text">Year: {{row.year}}</p>
+              <p class="card-text">City: {{row.city}}</p> 
+              <a href="{{row.url}}" class="btn btn-dark">Смотреть на Drom.ru</a>
+            	<a href="{{url_for('cars.choice_car',id_car=row.id)}}" class=" mt-2 btn btn-dark">Заказать осмотр</a>
+
+            </div>
+          </div>
+        </div>
+      {%endfor%}
+    </div> 
   </div>
 </div>
-{%endfor%}
+</div>
+
+
+
+<nav>
+  <ul class="pagination">
+    <li {% if not pages.has_prev %} 
+            class="page-item disabled"
+        {%endif%}
+     >
+      <a class="page-link" href="./?page={{ pages.prev_num }}" tabindex="-1" aria-hidden="true">Previous</a>
+    </li>
+    {%for page in pages.iter_pages()%}
+      {%if page%}
+      <li {% if page == pages.page %}class="page-item active" {%endif%}>
+        <a class="page-link" href="./?page={{ page }}">{{page}}</a>
+      </li>
+      {%endif%}
+    {%endfor%}
+    <li class="page-item">
+      <a class="page-link" href="./?page={{ pages.next_num }}">Next</a>
+    </li>
+  </ul>
+</nav>
+
 {%endblock%}
-
-

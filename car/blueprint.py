@@ -16,12 +16,21 @@ cars = Blueprint('cars', __name__, template_folder='templates')
 
 @cars.route('/')
 def index():
+	# Поисковая строка
 	q = request.args.get('q')
 	if q:
 		data = Avto.query.filter(Avto.name.contains(q)).all()
 	else:
 		data = Avto.query.all()
-	return render_template('cars/index.html',data=data)
+
+    # Пагинация 
+	page = request.args.get('page')
+	if page and page.isdigit():
+		page = int(page)
+	else:
+		page = 1 
+	pages = Avto.query.paginate(page=page,per_page = 9)
+	return render_template('cars/index.html',data=data, pages=pages)
 
 @cars.route('/choice_car/<id_car>',methods=['POST','GET'])
 def choice_car(id_car):
