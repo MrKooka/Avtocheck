@@ -1,16 +1,86 @@
 {%extends 'base.html'%}
 
 {%block content%}
-<form method="POST" action="{{url_for('cars.signup')}}">
-{{form.hidden_tag()}}
-<p>{{ form.email.label() }} {{ form.email() }}
-<p>{{ form.phone.label() }} {{ form.phone() }}
-<p>{{form.username.label()}} {{form.username()}}
-<p>{{ form.password.label() }} {{ form.password() }}
-<p><input name="b" value="a" type="radio" >Проверяющий</p>
-<p><input name="b" value="b" type="radio" >Обычный пользователь</p> 
-<p>{{ form.submit() }}
-    
-  </form> 
+<h1 class="row col-2 mx-auto flex-column">Регистрация</h1>
+<div class="container mt-5 mb-5">
+	<div class="row col-5 mx-auto flex-column">
+		<form class="" novalidate method="POST" action="{{url_for('cars.signup')}}">
+			{{form.hidden_tag()}}
+
+			<div class="mb-3">
+				{{ form.email.label(class_='form-label',**{'for':'validationEmail'}) }}
+				{%if not form.email.errors%}
+					 {{ form.email(class_='form-control',**{'type':'text','id':'validationEmail'}) }}
+				{% else %}
+					{{ form.email(class_='form-control is-invalid',**{'type':'text','id':'validationEmail'}) }}
+					<div id="validationEmailFeedback" class="invalid-feedback">
+			      		Некорректный email
+		   			</div>
+		   		{%endif%}	
+			</div>
+
+			<div class="mb-3">
+				{{ form.phone.label(class_='form-label',**{'for':'validationPhone'}) }} 
+				{%if not form.phone.errors%}
+					{{ form.phone(class_= 'form-control',**{'id':'validationPhone'}) }}
+				{% else %}
+					{{ form.phone(class_='form-control is-invalid',**{'type':'text','id':'validationEmail'}) }}
+					<div id="validationPhoneFeedback" class="invalid-feedback">
+			      		Некорректный номер телефона
+		   			</div>
+		   		{%endif%}
+		   	</div>
+
+			<div class="mb-3">
+				{{form.username.label(class_='form-label',**{'for':'validationUsername'})}} 
+				{% if not form.username.errors %}
+					{{form.username(class_='form-control',**{'id':'validationUsername'})}}
+				{% else %}
+					{{ form.username(class_='form-control is-invalid',**{'type':'text','id':'validationEmail'}) }}
+					<div id="validationUsernameFeedback" class="invalid-feedback">
+			      		Имя должено быть больше 4 , но меньше 15 символов
+		   			</div>
+		   		{%endif%}
+			</div>
+			<div class="mb-3">
+				{{form.password.label(class_='form-label',**{'for':'validationPsw'})}} 
+				{% if not form.password.errors %}
+					{{form.password(class_='form-control',**{'id':'validationPsw'})}}
+				{% else %}
+					{{ form.password(class_='form-control is-invalid',**{'type':'text','id':'validationPws'}) }}
+					<div id="validationPwsFeedback" class="invalid-feedback">
+			      		Пароль должено быть больше 8 , но меньше 80 символов
+		   			</div>
+		   		{%endif%}
+		   	</div>
+
+			<div class="form-check mt-3">
+				<input id="validationFormCheck2" name="b" value="a" type="radio" required >
+				<label class="form-check-label" for="validationFormCheck2">Проверяющий</label>
+			</div>
+			 <div class="form-check mb-3">
+				<input id="validationFormCheck2" name="b" value="b" type="radio" required >
+				<label class="form-check-label" for="validationFormCheck2">Обычный пользователь</label> 
+			</div>
+
+			<div class="col-12">
+				{{ form.submit(class_='btn btn-light') }}
+  			</div>
+
+  			
+	  			
+
+
+ 			 
+			
+		</form>
+	</div>
+</div>
+
+
 
 {%endblock%}
+{{ form.name(placeholder="Name", **{'ng-model': 'NameModel'}) }}<div class="form-check">
+    <input type="radio" class="form-check-input" id="validationFormCheck2" name="radio-stacked" required>
+    <label class="form-check-label" for="validationFormCheck2">Toggle this radio</label>
+  </div>

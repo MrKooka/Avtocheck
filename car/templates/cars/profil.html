@@ -12,7 +12,7 @@
 			<div class="row text-center">
 				{%for dict_ in form_and_car_id%}
 					{%for row in Avto.query.filter(Avto.id == dict_['id_car']).all()%}
-						<div class="card mb-5 " >
+						<div class="card mr-3 mb-5 text-dark " >
 							<div class="col">
 						  		<div class="card-body ">
 						    	<h5 class="card-title ">{{row.name}}</h5>
@@ -43,7 +43,7 @@
 {%if role == 'user'%}
 	<h2>Ваши заявки:</h2>
 	{%for row in RequestForm.query.filter(RequestForm.email == current_user.email).all()%}
-		<div class="card mb-5" style="width: 18rem;">
+		<div class="card mb-5 text-dark mr-3"  style="width: 18rem;">
 	  		<div class="card-body">
 	    	<p class="card-title">Ваше имя:{{row.name}}</p>
 	   	 	<p class="card-text">Ваш номер: {{row.phone}}<p>
